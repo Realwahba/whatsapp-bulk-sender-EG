@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhatsApp Bulk Sender - Egypt</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 1100px;
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+            padding: 30px;
+            text-align: center;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .main-content {
+            padding: 30px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .section {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+        }
+
+        .section h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+
+        .phone-input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .country-code {
+            background: #e9ecef;
+            border: 2px solid #dee2e6;
+            padding: 12px;
+            border-radius: 10px;
+            font-weight: bold;
+            color: #495057;
+        }
+
+        input[type="tel"], input[type="text"], textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+
+        input[type="tel"], input[type="text"] {
+            flex: 1;
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-add {
+            background: #25D366;
+            color: white;
+        }
+
+        .btn-add:hover {
+            background: #128C7E;
+        }
+
+        .btn-remove {
+            background: #dc3545;
+            color: white;
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+
+        .btn-bulk {
+            background: #6c757d;
+            color: white;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .btn-bulk:hover {
+            background: #5a6268;
+        }
+
+        .recipients-list {
+            max-height: 200px;
+            overflow-y: auto;
+            background: white;
+            border-radius: 10px;
+            padding: 10px;
+            margin-top: 15px;
+        }
+
+        .recipient-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            margin-bottom: 8px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .action-buttons {
+            grid-column: 1 / -1;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            padding: 20px 0;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+            color: white;
+            padding: 15px 40px;
+            font-size: 16px;
+        }
+
+        .btn-primary:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+        }
+
+        .btn-stop {
+            background: #dc3545;
+            color: white;
+            padding: 15px 40px;
+            font-size: 16px;
+        }
+
+        .status-section {
+            grid-column: 1 / -1;
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            display: none;
+        }
+
+        .status-section.active {
+            display: block;
+        }
+
+        .qr-section {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            display: none;
+        }
+
+        .qr-section.active {
+            display: block;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 30px;
+            background: #e9ecef;
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #25D366 0%, #128C7E 100%);
+            width: 0%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            transition: width 0.3s;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #25D366;
+        }
+
+        .stat-label {
+            color: #6c757d;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .status-message {
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            margin-top: 15px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .status-line {
+            padding: 5px 0;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 14px;
+        }
+
+        .loader {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #25D366;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error-message {
+            color: #dc3545;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .success-message {
+            color: #28a745;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .badge {
+            background: #25D366;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 12px;
+            margin-left: 5px;
+        }
+
+        .badge.warning {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .badge.danger {
+            background: #dc3545;
+        }
+
+        .bulk-input-section {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #dee2e6;
+        }
+
+        .bulk-textarea {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
+            font-size: 14px;
+            resize: vertical;
+            min-height: 120px;
+            margin-top: 10px;
+        }
+
+        .format-examples {
+            background: #e7f5ff;
+            border-left: 4px solid #0084ff;
+            padding: 12px;
+            border-radius: 5px;
+            margin-top: 10px;
+            font-size: 13px;
+            color: #004085;
+        }
+
+        .format-examples code {
+            background: #fff;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+
+        .image-upload-section {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #dee2e6;
+        }
+
+        .image-preview {
+            margin-top: 15px;
+            display: none;
+        }
+
+        .image-preview img {
+            max-width: 100%;
+            max-height: 200px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .image-info {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px;
+            background: white;
+            border-radius: 10px;
+            margin-top: 10px;
+        }
+
+        .image-name {
+            color: #333;
+            font-size: 14px;
+            font-weight: 500;
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .file-input-wrapper input[type=file] {
+            position: absolute;
+            left: -9999px;
+        }
+
+        .file-input-label {
+            display: block;
+            padding: 12px 20px;
+            background: #6c757d;
+            color: white;
+            border-radius: 10px;
+            cursor: pointer;
+            text-align: center;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .file-input-label:hover {
+            background: #5a6268;
+        }
+
+        .switch-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #25D366;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        .info-box {
+            background: #e7f5ff;
+            border-left: 4px solid #0084ff;
+            padding: 12px;
+            border-radius: 5px;
+            margin-top: 15px;
+            font-size: 13px;
+            color: #004085;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📱 WhatsApp Bulk Sender</h1>
+            <p>Send messages and images to multiple contacts - Optimized for Egypt 🇪🇬 - Wahba</p>
+        </div>
+
+        <div class="main-content">
+            <!-- Recipients Section -->
+            <div class="section">
+                <h2>👥 Recipients <span class="badge" id="recipientBadge">0</span></h2>
+                
+                <div class="phone-input-group">
+                    <input type="text" id="phoneInput" placeholder="Enter number (any format)" style="width: 100%;">
+                    <button class="btn btn-add" onclick="addRecipient()">Add</button>
+                </div>
+                
+                <div class="error-message" id="phoneError"></div>
+                <div class="success-message" id="phoneSuccess"></div>
+                
+                <div class="recipients-list" id="recipientsList">
+                    <p style="color: #6c757d; text-align: center; padding: 20px;">No recipients added yet</p>
+                </div>
+                
+                <div style="margin-top: 15px; display: flex; justify-content: space-between;">
+                    <span style="color: #6c757d;">
+                        Total: <strong id="recipientCount">0</strong>
+                        <span id="limitWarning" style="display: none;" class="badge warning">⚠️ Max 500</span>
+                    </span>
+                    <button class="btn btn-remove" onclick="clearAll()" style="display: none;" id="clearAllBtn">Clear All</button>
+                </div>
+
+                <!-- Bulk Add Section -->
+                <div class="bulk-input-section">
+                    <h3 style="font-size: 16px; margin-bottom: 10px;">📋 Bulk Add Numbers</h3>
+                    <textarea class="bulk-textarea" id="bulkInput" placeholder="Paste multiple numbers here (one per line)"></textarea>
+                    <button class="btn btn-bulk" onclick="bulkAddRecipients()">
+                        Add All Numbers
+                    </button>
+                    <div class="format-examples">
+                        <strong>✅ Accepted formats:</strong><br>
+                        <code>+20 123 456 7890</code> (with spaces)<br>
+                        <code>201234567890</code> (with country code)<br>
+                        <code>01234567890</code> (Egyptian format)<br>
+                        <code>1234567890</code> (without leading 0)<br>
+                        All formats will be automatically detected!
+                    </div>
+                </div>
+            </div>
+
+            <!-- Message & Media Section -->
+            <div class="section">
+                <h2>💬 Message & Media</h2>
+                <textarea id="messageInput" placeholder="Type your message here..."></textarea>
+                <div style="text-align: right; color: #6c757d; font-size: 14px; margin-top: 5px;">
+                    <span id="charCount">0</span> / 1000
+                </div>
+
+                <!-- Image Upload Section -->
+                <div class="image-upload-section">
+                    <h3 style="font-size: 16px; margin-bottom: 10px;">🖼️ Attach Image (Optional)</h3>
+                    
+                    <div class="file-input-wrapper">
+                        <input type="file" id="imageInput" accept="image/*" onchange="handleImageSelect(event)">
+                        <label for="imageInput" class="file-input-label">
+                            📷 Choose Image
+                        </label>
+                    </div>
+
+                    <div class="image-preview" id="imagePreview">
+                        <img id="previewImg" src="" alt="Preview">
+                        <div class="image-info">
+                            <span class="image-name" id="imageName"></span>
+                            <button class="btn btn-remove" onclick="removeImage()">Remove</button>
+                        </div>
+                    </div>
+
+                    <div class="switch-container">
+                        <label class="switch">
+                            <input type="checkbox" id="sendWithCaption" checked>
+                            <span class="slider"></span>
+                        </label>
+                        <label for="sendWithCaption">Send message as image caption</label>
+                    </div>
+
+                    <div class="info-box">
+                        💡 <strong>Tip:</strong> Supported formats: JPG, PNG, GIF (max 16MB)
+                    </div>
+                </div>
+            </div>
+
+            <!-- QR Code Section -->
+            <div class="qr-section" id="qrSection">
+                <h2>📱 Scan QR Code with WhatsApp</h2>
+                <p>Open WhatsApp → Settings → Linked Devices → Link a Device</p>
+                <div id="qrCode">
+                    <div class="loader"></div>
+                </div>
+            </div>
+
+            <!-- Status Section -->
+            <div class="status-section" id="statusSection">
+                <h2>📊 Sending Progress</h2>
+                
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill">0%</div>
+                </div>
+                
+                <div class="stats">
+                    <div class="stat-card">
+                        <div class="stat-value" id="sentCount">0</div>
+                        <div class="stat-label">✅ Sent</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="failedCount">0</div>
+                        <div class="stat-label">❌ Failed</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="remainingCount">0</div>
+                        <div class="stat-label">⏳ Remaining</div>
+                    </div>
+                </div>
+                
+                <div class="status-message" id="currentStatus">
+                    <div class="status-line">Waiting to start...</div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <button class="btn btn-primary" id="startBtn" onclick="startSending()" disabled>🚀 Start Sending</button>
+                <button class="btn btn-stop" id="stopBtn" onclick="stopSending()" style="display: none;">⛔ Stop</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const isElectron = typeof require !== 'undefined';
+        let ipcRenderer;
+        let recipients = [];
+        let isSending = false;
+        let selectedImage = null;
+        let imageBase64 = null;
+        const MAX_RECIPIENTS = 500;
+        
+        if (isElectron) {
+            try {
+                const electron = require('electron');
+                ipcRenderer = electron.ipcRenderer;
+                
+                // Set up IPC listeners
+                ipcRenderer.on('app-ready', () => {
+                    document.getElementById('qrSection').classList.add('active');
+                    updateStatus('Initializing WhatsApp...');
+                });
+                
+                ipcRenderer.on('qr-code', (event, qrDataUrl) => {
+                    document.getElementById('qrCode').innerHTML = '<img src="' + qrDataUrl + '" style="max-width: 256px;">';
+                    document.getElementById('qrSection').classList.add('active');
+                });
+                
+                ipcRenderer.on('authenticated', () => {
+                    document.getElementById('qrSection').innerHTML = '<h2>✅ Authenticated! Connecting...</h2>';
+                });
+                
+                ipcRenderer.on('whatsapp-ready', () => {
+                    document.getElementById('qrSection').classList.remove('active');
+                    updateStatus('✅ WhatsApp is ready!');
+                });
+                
+                ipcRenderer.on('status-update', (event, message) => {
+                    updateStatus(message);
+                });
+                
+                ipcRenderer.on('progress-update', (event, data) => {
+                    updateProgress(data.sent, data.failed, data.remaining);
+                });
+                
+                ipcRenderer.on('sending-complete', (event, data) => {
+                    finishSending(data.sent, data.failed);
+                });
+            } catch (e) {
+                console.error('Electron IPC setup failed:', e);
+            }
+        }
+        
+        // Smart Egyptian number parser
+        function parseEgyptianNumber(input) {
+            // Remove all non-numeric characters
+            let cleaned = input.replace(/\D/g, '');
+            
+            // Handle different formats
+            if (cleaned.startsWith('20')) {
+                // Already has country code
+                cleaned = cleaned.substring(2);
+            } else if (cleaned.startsWith('0')) {
+                // Egyptian format with leading 0
+                cleaned = cleaned.substring(1);
+            }
+            
+            // Check if it's a valid Egyptian mobile number
+            // Should be 10 digits and start with valid operator codes
+            if (cleaned.length === 10) {
+                const validPrefixes = ['10', '11', '12', '15'];
+                const prefix = cleaned.substring(0, 2);
+                
+                if (validPrefixes.includes(prefix)) {
+                    return '20' + cleaned; // Return with country code
+                }
+            }
+            
+            return null; // Invalid number
+        }
+        
+        // Phone input handler - allow any input format
+        document.getElementById('phoneInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') addRecipient();
+        });
+        
+        // Message character counter
+        document.getElementById('messageInput').addEventListener('input', function() {
+            const length = this.value.length;
+            document.getElementById('charCount').textContent = Math.min(length, 1000);
+            if (length > 1000) this.value = this.value.substring(0, 1000);
+            updateStartButton();
+        });
+        
+        function addRecipient() {
+            const input = document.getElementById('phoneInput');
+            const rawNumber = input.value.trim();
+            const error = document.getElementById('phoneError');
+            const success = document.getElementById('phoneSuccess');
+            
+            // Hide messages
+            error.style.display = 'none';
+            success.style.display = 'none';
+            
+            if (!rawNumber) {
+                error.textContent = 'Please enter a phone number';
+                error.style.display = 'block';
+                return;
+            }
+            
+            // Check max recipients
+            if (recipients.length >= MAX_RECIPIENTS) {
+                error.textContent = `Maximum ${MAX_RECIPIENTS} recipients allowed`;
+                error.style.display = 'block';
+                return;
+            }
+            
+            // Parse the number
+            const parsedNumber = parseEgyptianNumber(rawNumber);
+            
+            if (!parsedNumber) {
+                error.textContent = 'Invalid Egyptian mobile number. Should start with 010, 011, 012, or 015';
+                error.style.display = 'block';
+                return;
+            }
+            
+            // Check if already added
+            if (recipients.includes(parsedNumber)) {
+                error.textContent = 'This number is already added';
+                error.style.display = 'block';
+                return;
+            }
+            
+            // Add to recipients
+            recipients.push(parsedNumber);
+            input.value = '';
+            
+            // Show success message
+            success.textContent = `✅ Added +${parsedNumber}`;
+            success.style.display = 'block';
+            setTimeout(() => { success.style.display = 'none'; }, 2000);
+            
+            updateRecipientsList();
+        }
+        
+        function bulkAddRecipients() {
+            const bulkInput = document.getElementById('bulkInput');
+            const text = bulkInput.value.trim();
+            
+            if (!text) {
+                alert('Please paste some numbers first');
+                return;
+            }
+            
+            // Split by newlines, commas, or semicolons
+            const lines = text.split(/[\n,;]+/);
+            let added = 0;
+            let skipped = 0;
+            let invalid = 0;
+            const invalidNumbers = [];
+            
+            lines.forEach(line => {
+                const trimmed = line.trim();
+                if (!trimmed) return;
+                
+                // Check max limit
+                if (recipients.length >= MAX_RECIPIENTS) {
+                    return;
+                }
+                
+                const parsedNumber = parseEgyptianNumber(trimmed);
+                
+                if (parsedNumber) {
+                    if (!recipients.includes(parsedNumber)) {
+                        recipients.push(parsedNumber);
+                        added++;
+                    } else {
+                        skipped++;
+                    }
+                } else {
+                    invalid++;
+                    invalidNumbers.push(trimmed);
+                }
+            });
+            
+            updateRecipientsList();
+            bulkInput.value = '';
+            
+            // Show detailed result
+            let message = `✅ Added: ${added} numbers`;
+            if (skipped > 0) message += `\n⚠️ Skipped: ${skipped} duplicates`;
+            if (invalid > 0) {
+                message += `\n❌ Invalid: ${invalid} numbers`;
+                if (invalidNumbers.length <= 5) {
+                    message += `\n   ${invalidNumbers.join(', ')}`;
+                }
+            }
+            if (recipients.length >= MAX_RECIPIENTS) {
+                message += `\n\n⚠️ Maximum limit reached (${MAX_RECIPIENTS})`;
+            }
+            
+            alert(message);
+        }
+        
+        function handleImageSelect(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            // Check file size (16MB max for WhatsApp)
+            if (file.size > 16 * 1024 * 1024) {
+                alert('Image size must be less than 16MB');
+                event.target.value = '';
+                return;
+            }
+            
+            // Check file type
+            if (!file.type.startsWith('image/')) {
+                alert('Please select an image file');
+                event.target.value = '';
+                return;
+            }
+            
+            selectedImage = file;
+            
+            // Read and preview image
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                imageBase64 = e.target.result;
+                document.getElementById('previewImg').src = e.target.result;
+                document.getElementById('imageName').textContent = file.name;
+                document.getElementById('imagePreview').style.display = 'block';
+                updateStartButton();
+            };
+            reader.readAsDataURL(file);
+        }
+        
+        function removeImage() {
+            selectedImage = null;
+            imageBase64 = null;
+            document.getElementById('imageInput').value = '';
+            document.getElementById('imagePreview').style.display = 'none';
+            updateStartButton();
+        }
+        
+        function removeRecipient(index) {
+            recipients.splice(index, 1);
+            updateRecipientsList();
+        }
+        
+        function clearAll() {
+            if (confirm('Remove all recipients?')) {
+                recipients = [];
+                updateRecipientsList();
+            }
+        }
+        
+        function updateRecipientsList() {
+            const list = document.getElementById('recipientsList');
+            const count = document.getElementById('recipientCount');
+            const badge = document.getElementById('recipientBadge');
+            const clearBtn = document.getElementById('clearAllBtn');
+            const limitWarning = document.getElementById('limitWarning');
+            
+            count.textContent = recipients.length;
+            badge.textContent = recipients.length;
+            
+            // Update badge color
+            if (recipients.length >= MAX_RECIPIENTS) {
+                badge.className = 'badge danger';
+                limitWarning.style.display = 'inline';
+            } else if (recipients.length >= MAX_RECIPIENTS * 0.8) {
+                badge.className = 'badge warning';
+                limitWarning.style.display = 'inline';
+            } else {
+                badge.className = 'badge';
+                limitWarning.style.display = 'none';
+            }
+            
+            if (recipients.length === 0) {
+                list.innerHTML = '<p style="color: #6c757d; text-align: center; padding: 20px;">No recipients added yet</p>';
+                clearBtn.style.display = 'none';
+            } else {
+                clearBtn.style.display = 'inline-block';
+                list.innerHTML = recipients.map((num, i) => 
+                    '<div class="recipient-item">' +
+                    '<span>🇪🇬 +' + num + '</span>' +
+                    '<button class="btn btn-remove" onclick="removeRecipient(' + i + ')">Remove</button>' +
+                    '</div>'
+                ).join('');
+            }
+            
+            updateStartButton();
+        }
+        
+        function updateStartButton() {
+            const btn = document.getElementById('startBtn');
+            const msg = document.getElementById('messageInput').value.trim();
+            // Enable button if there are recipients and either message or image
+            btn.disabled = !(recipients.length > 0 && (msg.length > 0 || selectedImage) && !isSending);
+        }
+        
+        function startSending() {
+            const message = document.getElementById('messageInput').value.trim();
+            const sendWithCaption = document.getElementById('sendWithCaption').checked;
+            
+            if (recipients.length === 0) {
+                alert('Please add at least one recipient');
+                return;
+            }
+            
+            if (!message && !selectedImage) {
+                alert('Please enter a message or select an image');
+                return;
+            }
+            
+            if (recipients.length > 100) {
+                const confirm = window.confirm(`You're about to send to ${recipients.length} recipients.\n\n⚠️ Warning: Sending to more than 100 people per day may result in temporary ban.\n\nContinue?`);
+                if (!confirm) return;
+            }
+            
+            isSending = true;
+            document.getElementById('statusSection').classList.add('active');
+            document.getElementById('startBtn').style.display = 'none';
+            document.getElementById('stopBtn').style.display = 'inline-block';
+            
+            const sendData = {
+                recipients,
+                message,
+                hasImage: !!selectedImage,
+                sendWithCaption
+            };
+            
+            if (selectedImage) {
+                sendData.imageName = selectedImage.name;
+                sendData.imageData = imageBase64;
+                sendData.imageMimeType = selectedImage.type;
+            }
+            
+            if (isElectron && ipcRenderer) {
+                updateStatus(selectedImage ? '📷 Preparing to send messages with image...' : '📤 Starting to send messages...');
+                ipcRenderer.send('start-sending', sendData);
+            }
+        }
+        
+        function stopSending() {
+            if (isElectron && ipcRenderer) {
+                ipcRenderer.send('stop-sending');
+            }
+            document.getElementById('stopBtn').disabled = true;
+        }
+        
+        function updateProgress(sent, failed, remaining) {
+            const total = recipients.length;
+            const done = sent + failed;
+            const percent = Math.round((done / total) * 100);
+            
+            const fill = document.getElementById('progressFill');
+            fill.style.width = percent + '%';
+            fill.textContent = percent + '%';
+            
+            document.getElementById('sentCount').textContent = sent;
+            document.getElementById('failedCount').textContent = failed;
+            document.getElementById('remainingCount').textContent = remaining;
+        }
+        
+        function updateStatus(message) {
+            const container = document.getElementById('currentStatus');
+            const line = document.createElement('div');
+            line.className = 'status-line';
+            line.textContent = new Date().toLocaleTimeString() + ': ' + message;
+            container.insertBefore(line, container.firstChild);
+            
+            while (container.children.length > 10) {
+                container.removeChild(container.lastChild);
+            }
+        }
+        
+        function finishSending(sent, failed) {
+            isSending = false;
+            document.getElementById('startBtn').style.display = 'inline-block';
+            document.getElementById('stopBtn').style.display = 'none';
+            document.getElementById('stopBtn').disabled = false;
+            
+            alert('Complete!\n\n✅ Sent: ' + sent + '\n❌ Failed: ' + failed);
+        }
+    </script>
+</body>
+</html>
