@@ -1,5 +1,3 @@
-# whatsapp-bulk-sender-EG
-WhatsApp Bulk Sender for Egypt (+20 country code) built with Electron + Node.js.
 # WhatsApp Bulk Sender (Egypt 🇪🇬 +20)
 
 🚀 A desktop app built with **Electron** and **Node.js** to send bulk WhatsApp messages.  
@@ -17,25 +15,24 @@ WhatsApp Bulk Sender for Egypt (+20 country code) built with Electron + Node.js.
 
 ## 🖼️ Screenshots
 
-### Main UI
+### Main UI (with country code prefilled as +20)
 ![Main UI](screenshots/ui.png)
 
-### QR Code Login
+### QR Code Login (scan to authenticate)
 ![QR Code](screenshots/qrcode.png)
 
-### Sending Status
+### Sending Status (failed numbers not on WhatsApp)
 ![Status](screenshots/status.png)
 
-*(Place your actual screenshots in a folder named `screenshots/` inside your project, then update the file names if needed.)*
+> ℹ️ In the example above, sending failed because the numbers `+201234567890` and `+201234567891` are **not registered on WhatsApp**.  
+The app automatically detects this and skips them.
 
 ---
 
 ## 🛠 Installation
 
-Clone this repo and install dependencies:
+Clone this repository:
 
 ```bash
 git clone https://github.com/YOUR-USERNAME/whatsapp-bulk-sender-egypt.git
 cd whatsapp-bulk-sender-egypt
-npm install
-npm start
