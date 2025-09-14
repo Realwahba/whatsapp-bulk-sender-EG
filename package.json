@@ -1,0 +1,35 @@
+{
+  "name": "whatsapp-bulk-sender-egypt",
+  "version": "1.0.0",
+  "description": "WhatsApp Bulk Message Sender for Egypt",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron . --disable-gpu --disable-software-rasterizer",
+    "start-safe": "electron . --disable-gpu --disable-software-rasterizer --no-sandbox",
+    "build-win": "electron-builder --win",
+    "build": "electron-builder"
+  },
+  "keywords": ["whatsapp", "bulk", "sender", "egypt"],
+  "author": "Your Name",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^27.0.0",
+    "electron-builder": "^24.6.4"
+  },
+  "dependencies": {
+    "whatsapp-web.js": "^1.23.0",
+    "qrcode": "^1.5.3",
+    "puppeteer": "^21.0.0"
+  },
+  "build": {
+    "appId": "com.yourcompany.whatsapp-sender",
+    "productName": "WhatsApp Sender Egypt",
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "icon.ico"
+    }
+  }
+}
